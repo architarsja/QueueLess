@@ -18,3 +18,5 @@ src/main/resources/db.properties
 Thumbs.db
 
 .vercel/
+.vercel
+.env*
