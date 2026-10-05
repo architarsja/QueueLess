@@ -1,0 +1,11 @@
+FROM tomcat:11.0-jdk24-temurin
+
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+COPY target/QueueLess.war /usr/local/tomcat/webapps/ROOT.war
+
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+
+RUN chmod +x /docker-entrypoint.sh
+
+CMD ["/docker-entrypoint.sh"]

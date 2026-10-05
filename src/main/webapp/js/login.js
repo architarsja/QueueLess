@@ -1,2 +1,45 @@
-const form=document.getElementById('loginForm'),msg=document.getElementById('loginMessage'),textEl=document.getElementById('loginText'),spin=document.getElementById('loginSpin');
-form.addEventListener('submit',async e=>{e.preventDefault();msg.className='form-message hidden';textEl.textContent='Signing in…';spin.classList.remove('hidden');form.querySelector('button').disabled=true;try{const r=await fetch('api/login',{method:'POST',body:new URLSearchParams(new FormData(form))});const d=await r.json();if(!r.ok||!d.success)throw new Error(d.message||'Invalid login.');sessionStorage.setItem('queueLessUser',JSON.stringify({name:d.name,role:d.role}));window.location.href='staff-dashboard.html';}catch(err){msg.textContent=err.message;msg.className='form-message error';form.querySelector('button').disabled=false;textEl.textContent='Sign in';}finally{spin.classList.add('hidden')}});
+const form = document.getElementById('loginForm'),
+    msg = document.getElementById('loginMessage'),
+    textEl = document.getElementById('loginText'),
+    spin = document.getElementById('loginSpin');
+
+form.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    msg.className = 'form-message hidden';
+    textEl.textContent = 'Signing in…';
+    spin.classList.remove('hidden');
+    form.querySelector('button').disabled = true;
+
+    try {
+        const r = await fetch('/api/login', {
+            method: 'POST',
+            body: new URLSearchParams(new FormData(form))
+        });
+
+        const d = await r.json();
+
+        if (!r.ok || !d.success) {
+            throw new Error(d.message || 'Invalid login.');
+        }
+
+        sessionStorage.setItem(
+            'queueLessUser',
+            JSON.stringify({
+                name: d.name,
+                role: d.role
+            })
+        );
+
+        window.location.href = 'staff-dashboard.html';
+
+    } catch (err) {
+        msg.textContent = err.message;
+        msg.className = 'form-message error';
+        form.querySelector('button').disabled = false;
+        textEl.textContent = 'Sign in';
+
+    } finally {
+        spin.classList.add('hidden');
+    }
+});
