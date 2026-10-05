@@ -8,14 +8,27 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 
-FROM tomcat:11.0-jdk24-temurin
+FROM eclipse-temurin:24-jre
 
-RUN rm -rf /usr/local/tomcat/webapps/*
+ENV CATALINA_HOME=/opt/tomcat
+ENV PATH=$CATALINA_HOME/bin:$PATH
 
-COPY --from=build /app/target/QueueLess.war /usr/local/tomcat/webapps/ROOT.war
+RUN apt-get update \
+    && apt-get install -y curl tar \
+    && rm -rf /var/lib/apt/lists/* \
+    && curl -fL https://archive.apache.org/dist/tomcat/tomcat-11/v11.0.24/bin/apache-tomcat-11.0.24.tar.gz -o /tmp/tomcat.tar.gz \
+    && mkdir -p /opt \
+    && tar -xzf /tmp/tomcat.tar.gz -C /opt \
+    && mv /opt/apache-tomcat-11.0.24 /opt/tomcat \
+    && rm /tmp/tomcat.tar.gz \
+    && rm -rf /opt/tomcat/webapps/*
+
+COPY --from=build /app/target/QueueLess.war /opt/tomcat/webapps/ROOT.war
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN chmod +x /docker-entrypoint.sh
+
+EXPOSE 8080
 
 CMD ["/docker-entrypoint.sh"]
