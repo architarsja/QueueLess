@@ -1,0 +1,18 @@
+target/
+.idea/
+.vscode/
+*.iml
+
+# Local database configuration
+src/main/resources/db.properties
+
+# Environment/config files
+.env
+*.env
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

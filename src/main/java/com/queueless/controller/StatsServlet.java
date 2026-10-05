@@ -1,0 +1,5 @@
+package com.queueless.controller;
+import com.queueless.dao.*; import com.queueless.model.*; import com.queueless.util.*; import jakarta.servlet.annotation.WebServlet; import jakarta.servlet.http.*; import java.io.*;
+@WebServlet("/api/dashboard") public class StatsServlet extends HttpServlet{
+ protected void doGet(HttpServletRequest req,HttpServletResponse res)throws IOException{if(AuthUtil.require(req,res)==null)return;try{long sid=Long.parseLong(req.getParameter("serviceId"));QueueDAO q=new QueueDAO();QueueEntry cur=q.current(sid);ServiceModel s=new ServiceDAO().find(sid);int wait=q.waiting(sid),done=q.completedToday(sid);double avg=q.avgWait(sid);res.setContentType("application/json;charset=UTF-8");res.getWriter().write("{\"success\":true,\"waiting\":"+wait+",\"serving\":\""+(cur==null?"":cur.token)+"\",\"servingName\":\""+(cur==null?"":JsonUtil.esc(cur.name))+"\",\"completed\":"+done+",\"averageWait\":"+Math.round(avg)+",\"service\":\""+(s==null?"":JsonUtil.esc(s.name))+"\"}");}catch(Exception e){res.setStatus(500);res.getWriter().write(JsonUtil.error("Unable to load dashboard data."));}}
+}

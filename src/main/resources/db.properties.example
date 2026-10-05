@@ -1,0 +1,5 @@
+# Copy this file to db.properties for local development, or use environment variables.
+DB_URL=jdbc:mysql://localhost:3306/queueless?useSSL=false&serverTimezone=Asia/Kolkata&allowPublicKeyRetrieval=true
+DB_USERNAME=root
+DB_PASSWORD=Archu$072
+setup.key=QueueLessSetup@2026
