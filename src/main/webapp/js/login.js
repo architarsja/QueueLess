@@ -14,7 +14,8 @@ form.addEventListener('submit', async e => {
     try {
         const r = await fetch('/api/login', {
             method: 'POST',
-            body: new URLSearchParams(new FormData(form))
+            body: new URLSearchParams(new FormData(form)),
+            credentials: 'include'
         });
 
         const d = await r.json();
